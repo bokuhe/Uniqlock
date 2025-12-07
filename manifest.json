@@ -2,7 +2,7 @@
   "name": "Uniqlock Rewind",
   "short_name": "Uniqlock",
   "description": "A modern remastering of an old-web classic - Music, Dance, Clock",
-  "start_url": "/",
+  "start_url": "./",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#000000",
