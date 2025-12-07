@@ -21,6 +21,11 @@
 		<meta name="twitter:image" content="https://raw.githubusercontent.com/MegaJerk/Uniqlock/main/media/embed%20cards/Uniqlock%20Card%20-%2001p.png" />
 		<meta name="twitter:image:alt" content="two dancers looking forward at the camera and holding the same pose, each dancer is using their hands to imitate the shape of a bird. The text Uniqlock Rewind is shown in the top left corner of the image, while the text Music, Dance, Clock is shown along the bottom." />
 		<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+		<link rel="manifest" href="manifest.json">
+		<link rel="apple-touch-icon" href="./assets/icons/pwa-192x192.png">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="theme-color" content="#000000">
 		<link rel="stylesheet" href="./css/style.css">
 		<script type="text/javascript">
 			var debuggingMessages = false;
@@ -118,5 +123,37 @@
 			-->
 		</div>
 		<script type="module" src="./js/mainScript.js"></script>
+		<script>
+			// Register Service Worker for PWA
+			if ('serviceWorker' in navigator) {
+				window.addEventListener('load', () => {
+					navigator.serviceWorker.register('./sw.js')
+						.then((registration) => {
+							console.log('ServiceWorker registered:', registration.scope);
+						})
+						.catch((error) => {
+							console.log('ServiceWorker registration failed:', error);
+						});
+				});
+			}
+
+			// Auto fullscreen when running as PWA
+			if (window.matchMedia('(display-mode: standalone)').matches ||
+				window.matchMedia('(display-mode: fullscreen)').matches ||
+				window.navigator.standalone === true) {
+				// PWA mode detected - request fullscreen on first user interaction
+				document.addEventListener('click', function requestFullscreen() {
+					const elem = document.documentElement;
+					if (elem.requestFullscreen) {
+						elem.requestFullscreen();
+					} else if (elem.webkitRequestFullscreen) {
+						elem.webkitRequestFullscreen();
+					} else if (elem.msRequestFullscreen) {
+						elem.msRequestFullscreen();
+					}
+					document.removeEventListener('click', requestFullscreen);
+				}, { once: true });
+			}
+		</script>
 	</body>
 </html>
