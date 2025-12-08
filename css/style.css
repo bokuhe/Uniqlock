@@ -60,6 +60,15 @@ body {
 	background-color: black;
 }
 
+/* Hide cursor in fullscreen mode after inactivity */
+body.cursor-hidden {
+	cursor: none;
+}
+
+body.cursor-hidden * {
+	cursor: none;
+}
+
 body.hide{
 	display: none;
 }

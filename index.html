@@ -154,6 +154,47 @@
 					document.removeEventListener('click', requestFullscreen);
 				}, { once: true });
 			}
+
+			// Hide cursor in fullscreen mode after inactivity
+			(function() {
+				let cursorTimeout;
+				const CURSOR_HIDE_DELAY = 2000; // 2 seconds
+
+				function hideCursor() {
+					if (document.fullscreenElement || document.webkitFullscreenElement) {
+						document.body.classList.add('cursor-hidden');
+					}
+				}
+
+				function showCursor() {
+					document.body.classList.remove('cursor-hidden');
+					clearTimeout(cursorTimeout);
+					if (document.fullscreenElement || document.webkitFullscreenElement) {
+						cursorTimeout = setTimeout(hideCursor, CURSOR_HIDE_DELAY);
+					}
+				}
+
+				document.addEventListener('mousemove', showCursor);
+				document.addEventListener('mousedown', showCursor);
+
+				document.addEventListener('fullscreenchange', function() {
+					if (document.fullscreenElement) {
+						cursorTimeout = setTimeout(hideCursor, CURSOR_HIDE_DELAY);
+					} else {
+						clearTimeout(cursorTimeout);
+						document.body.classList.remove('cursor-hidden');
+					}
+				});
+
+				document.addEventListener('webkitfullscreenchange', function() {
+					if (document.webkitFullscreenElement) {
+						cursorTimeout = setTimeout(hideCursor, CURSOR_HIDE_DELAY);
+					} else {
+						clearTimeout(cursorTimeout);
+						document.body.classList.remove('cursor-hidden');
+					}
+				});
+			})();
 		</script>
 	</body>
 </html>
